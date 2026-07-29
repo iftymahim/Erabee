@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Compliments · For Erabeee</title>
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<div id="bg-sky"></div>
+
+<header class="top-nav">
+  <a class="nav-home" href="index.html" aria-label="Home">🏠</a>
+  <div class="nav-stage">Stage <span>3</span> of 9 · Compliment Generator</div>
+  <button class="nav-music" id="music-toggle" title="Toggle music">🔇</button>
+</header>
+<div class="progress-track"><div class="progress-fill" style="width:33%;"></div></div>
+
+<main>
+  <div class="card">
+    <div class="eyebrow">🌸 Compliment Generator</div>
+    <h2>Just because you deserve one</h2>
+    <div class="message-box script" id="compliment-text">Erabeee, even the moon envies your glow.</div>
+    <button class="btn secondary" onclick="playClick(); newCompliment();">Another one, please</button>
+  </div>
+
+  <div class="stage-footer-nav">
+    <a class="btn secondary" href="hug.html">← Back</a>
+    <a class="btn ghost" href="index.html">Map</a>
+    <a class="btn" href="laugh.html">Next: Make Me Laugh →</a>
+  </div>
+</main>
+
+<footer>
+  <p class="script" style="font-size:22px;">Made with endless warmth, just for Erabeee 💖</p>
+  <button id="secret-heart" title="...">💗</button>
+</footer>
+
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <p id="modal-text"></p>
+  </div>
+</div>
+
+<script src="assets/script.js"></script>
+<script>
+const compliments = [
+  "Erabeee, even the moon envies your glow.",
+  "You make ordinary days feel magical.",
+  "You're someone's comfort place.",
+  "Your smile deserves its own constellation.",
+  "You're prettier than a sky full of stars.",
+  "You carry a kind of warmth that people remember, Erabeee."
+];
+function newCompliment(){ document.getElementById('compliment-text').textContent = pick(compliments); }
+</script>
+</body>
+</html>

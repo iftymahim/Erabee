@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>You're Amazing · For Erabeee</title>
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<div id="bg-sky"></div>
+
+<header class="top-nav">
+  <a class="nav-home" href="index.html" aria-label="Home">🏠</a>
+  <div class="nav-stage">Stage <span>5</span> of 9 · Reasons You're Amazing</div>
+  <button class="nav-music" id="music-toggle" title="Toggle music">🔇</button>
+</header>
+<div class="progress-track"><div class="progress-fill" style="width:55%;"></div></div>
+
+<main id="amazing">
+  <div class="card" style="max-width:520px;">
+    <div class="eyebrow">⭐ Reasons You're Amazing</div>
+    <h2>A little list, all about you</h2>
+    <ul class="list-amazing" id="amazing-list"></ul>
+  </div>
+
+  <div class="stage-footer-nav">
+    <a class="btn secondary" href="laugh.html">← Back</a>
+    <a class="btn ghost" href="index.html">Map</a>
+    <a class="btn" href="memories.html">Next: Happy Memories →</a>
+  </div>
+</main>
+
+<footer>
+  <p class="script" style="font-size:22px;">Made with endless warmth, just for Erabeee 💖</p>
+  <button id="secret-heart" title="...">💗</button>
+</footer>
+
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <p id="modal-text"></p>
+  </div>
+</div>
+
+<script src="assets/script.js"></script>
+<script>
+const reasons = [
+  "You're kind.", "You're stronger than you know.", "You're beautifully unique.",
+  "You're enough.", "You make people smile.", "You deserve happiness.",
+  "You're loved more than you realize."
+];
+const list = document.getElementById('amazing-list');
+reasons.forEach(r=>{
+  const li = document.createElement('li');
+  li.textContent = r;
+  list.appendChild(li);
+});
+setTimeout(()=>{
+  [...list.children].forEach((li,i)=> setTimeout(()=>li.classList.add('show'), i*150));
+}, 300);
+</script>
+</body>
+</html>

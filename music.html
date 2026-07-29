@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Music Corner · For Erabeee</title>
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<div id="bg-sky"></div>
+
+<header class="top-nav">
+  <a class="nav-home" href="index.html" aria-label="Home">🏠</a>
+  <div class="nav-stage">Stage <span>9</span> of 9 · Music Corner</div>
+  <button class="nav-music" id="music-toggle" title="Toggle music">🔇</button>
+</header>
+<div class="progress-track"><div class="progress-fill" style="width:100%;"></div></div>
+
+<main>
+  <div class="card">
+    <div class="eyebrow">🎵 Music Corner</div>
+    <h2>A soft little melody</h2>
+    <p style="color:var(--text-soft); margin-top:10px;">A warm, happy chord hums underneath a gentle bell melody — soft enough to leave playing while you wander around the rest of the site. It keeps playing quietly as you move between pages.</p>
+    <button class="btn" id="music-corner-btn" onclick="toggleMusic()">Play soft music</button>
+  </div>
+
+  <p class="script" style="font-size:26px; margin-top:40px; max-width:480px;">You've reached the end of the little map, Erabeee...<br>but you can always wander back in. 🌸</p>
+
+  <div class="stage-footer-nav">
+    <a class="btn secondary" href="games.html">← Back</a>
+    <a class="btn" href="index.html">Back to the start 🏠</a>
+  </div>
+</main>
+
+<footer>
+  <p class="script" style="font-size:22px;">Made with endless warmth, just for Erabeee 💖</p>
+  <button id="secret-heart" title="...">💗</button>
+</footer>
+
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <p id="modal-text"></p>
+  </div>
+</div>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

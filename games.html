@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Mini Games · For Erabeee</title>
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<div id="bg-sky"></div>
+
+<header class="top-nav">
+  <a class="nav-home" href="index.html" aria-label="Home">🏠</a>
+  <div class="nav-stage">Stage <span>8</span> of 9 · Mini Games</div>
+  <button class="nav-music" id="music-toggle" title="Toggle music">🔇</button>
+</header>
+<div class="progress-track"><div class="progress-fill" style="width:88%;"></div></div>
+
+<main>
+  <div class="eyebrow">🎮 Cute Mini Games</div>
+  <h2 style="margin-bottom:20px;">A little playground</h2>
+  <div id="games-grid">
+
+    <div class="card game-card">
+      <h3>💕 Pop the Hearts</h3>
+      <div class="score-pill">Score: <span id="pop-score">0</span></div>
+      <div class="game-stage" id="pop-stage"></div>
+      <button class="btn secondary" onclick="startPopGame()">Play</button>
+    </div>
+
+    <div class="card game-card">
+      <h3>⭐ Catch the Stars</h3>
+      <div class="score-pill">Score: <span id="catch-score">0</span></div>
+      <div class="game-stage" id="catch-stage"></div>
+      <button class="btn secondary" onclick="startCatchGame()">Play</button>
+    </div>
+
+    <div class="card game-card">
+      <h3>🐱 Feed the Kitty</h3>
+      <div class="score-pill">Fed: <span id="kitty-score">0</span> times</div>
+      <div class="game-stage"><div class="kitty-box"><div id="kitty-emoji" onclick="feedKitty()">🐱</div><p style="font-size:14px; opacity:.7;">Tap the kitty to feed it a treat 🍡</p></div></div>
+    </div>
+
+    <div class="card game-card">
+      <h3>🧠 Memory Match</h3>
+      <div class="score-pill">Moves: <span id="memory-moves">0</span></div>
+      <div class="game-stage" style="height:auto; padding:14px;">
+        <div class="memory-grid" id="memory-grid"></div>
+      </div>
+      <button class="btn secondary" onclick="setupMemoryGame()">Reshuffle</button>
+    </div>
+
+  </div>
+
+  <div class="stage-footer-nav">
+    <a class="btn secondary" href="fortune.html">← Back</a>
+    <a class="btn ghost" href="index.html">Map</a>
+    <a class="btn" href="music.html">Next: Music Corner →</a>
+  </div>
+</main>
+
+<footer>
+  <p class="script" style="font-size:22px;">Made with endless warmth, just for Erabeee 💖</p>
+  <button id="secret-heart" title="...">💗</button>
+</footer>
+
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <p id="modal-text"></p>
+  </div>
+</div>
+
+<script src="assets/script.js"></script>
+<script>
+/* Pop the Hearts */
+let popScoreVal = 0, popInterval;
+function startPopGame(){
+  playClick();
+  const stage = document.getElementById('pop-stage');
+  stage.innerHTML='';
+  clearInterval(popInterval);
+  popScoreVal = 0;
+  document.getElementById('pop-score').textContent = popScoreVal;
+  let ticks = 0;
+  popInterval = setInterval(()=>{
+    ticks++;
+    if(ticks>18){ clearInterval(popInterval); return; }
+    const t = document.createElement('div');
+    t.className='pop-target';
+    t.textContent = pick(['💗','🫧','💕','💖']);
+    t.style.left = rand(5,85)+'%';
+    t.style.bottom = '0px';
+    t.style.animationDuration = rand(2.2,3.4)+'s';
+    t.onclick = ()=>{ popScoreVal++; document.getElementById('pop-score').textContent = popScoreVal; t.remove(); playClick(); };
+    stage.appendChild(t);
+    setTimeout(()=> t.remove(), 3500);
+  }, 500);
+}
+
+/* Catch the Stars */
+let catchScoreVal = 0, catchInterval;
+function startCatchGame(){
+  playClick();
+  const stage = document.getElementById('catch-stage');
+  stage.innerHTML='';
+  clearInterval(catchInterval);
+  catchScoreVal = 0;
+  document.getElementById('catch-score').textContent = catchScoreVal;
+  let ticks = 0;
+  catchInterval = setInterval(()=>{
+    ticks++;
+    if(ticks>18){ clearInterval(catchInterval); return; }
+    const s = document.createElement('div');
+    s.className='falling-star';
+    s.textContent = '⭐';
+    s.style.left = rand(5,85)+'%';
+    s.style.animationDuration = rand(2.6,4)+'s';
+    s.onclick = ()=>{ catchScoreVal++; document.getElementById('catch-score').textContent = catchScoreVal; s.remove(); playClick(); };
+    stage.appendChild(s);
+    setTimeout(()=> s.remove(), 4200);
+  }, 550);
+}
+
+/* Feed the Kitty */
+let kittyScoreVal = 0;
+function feedKitty(){
+  playClick();
+  kittyScoreVal++;
+  document.getElementById('kitty-score').textContent = kittyScoreVal;
+  const k = document.getElementById('kitty-emoji');
+  k.style.transform = 'scale(1.3) rotate(-8deg)';
+  setTimeout(()=> k.style.transform='scale(1) rotate(0deg)', 180);
+}
+
+/* Memory Match */
+const memoryEmojis = ['🌸','💖','🐰','⭐','🍡','🦋'];
+let memoryState = { first:null, second:null, lock:false, moves:0 };
+function setupMemoryGame(){
+  const grid = document.getElementById('memory-grid');
+  grid.innerHTML='';
+  memoryState = { first:null, second:null, lock:false, moves:0 };
+  document.getElementById('memory-moves').textContent = 0;
+  const deck = [...memoryEmojis, ...memoryEmojis].sort(()=>Math.random()-0.5);
+  deck.forEach((emoji)=>{
+    const tile = document.createElement('div');
+    tile.className='memory-tile';
+    tile.dataset.emoji = emoji;
+    tile.textContent = '❔';
+    tile.onclick = ()=> flipTile(tile);
+    grid.appendChild(tile);
+  });
+}
+function flipTile(tile){
+  if(memoryState.lock || tile.classList.contains('flipped') || tile.classList.contains('matched')) return;
+  playClick();
+  tile.classList.add('flipped');
+  tile.textContent = tile.dataset.emoji;
+  if(!memoryState.first){ memoryState.first = tile; return; }
+  memoryState.second = tile;
+  memoryState.lock = true;
+  memoryState.moves++;
+  document.getElementById('memory-moves').textContent = memoryState.moves;
+  if(memoryState.first.dataset.emoji === memoryState.second.dataset.emoji){
+    memoryState.first.classList.add('matched');
+    memoryState.second.classList.add('matched');
+    memoryState.first = null; memoryState.second = null; memoryState.lock = false;
+  } else {
+    setTimeout(()=>{
+      memoryState.first.classList.remove('flipped'); memoryState.first.textContent='❔';
+      memoryState.second.classList.remove('flipped'); memoryState.second.textContent='❔';
+      memoryState.first = null; memoryState.second = null; memoryState.lock = false;
+    }, 700);
+  }
+}
+setupMemoryGame();
+</script>
+</body>
+</html>

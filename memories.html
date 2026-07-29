@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Happy Memories · For Erabeee</title>
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<div id="bg-sky"></div>
+
+<header class="top-nav">
+  <a class="nav-home" href="index.html" aria-label="Home">🏠</a>
+  <div class="nav-stage">Stage <span>6</span> of 9 · Happy Memories</div>
+  <button class="nav-music" id="music-toggle" title="Toggle music">🔇</button>
+</header>
+<div class="progress-track"><div class="progress-fill" style="width:66%;"></div></div>
+
+<main>
+  <div class="eyebrow">📖 Happy Memories</div>
+  <h2 style="margin-bottom:16px;">A tiny scrapbook</h2>
+  <div id="scrapbook-wrap">
+    <div class="scrap-card" id="scrap-card">
+      <div class="polaroid-img" id="scrap-img">🌸</div>
+      <div class="scrap-caption" id="scrap-caption">Add your own memory here</div>
+    </div>
+    <div class="scrap-nav">
+      <button onclick="scrapPrev()" aria-label="Previous memory">◀</button>
+      <button onclick="scrapNext()" aria-label="Next memory">▶</button>
+    </div>
+  </div>
+  <p style="color:var(--text-soft); max-width:420px; margin-top:18px; font-size:14px;">Tip: replace the <code>scrapEntries</code> list in this page's script with real photos and inside jokes.</p>
+
+  <div class="stage-footer-nav">
+    <a class="btn secondary" href="amazing.html">← Back</a>
+    <a class="btn ghost" href="index.html">Map</a>
+    <a class="btn" href="fortune.html">Next: Fortune Cookie →</a>
+  </div>
+</main>
+
+<footer>
+  <p class="script" style="font-size:22px;">Made with endless warmth, just for Erabeee 💖</p>
+  <button id="secret-heart" title="...">💗</button>
+</footer>
+
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <p id="modal-text"></p>
+  </div>
+</div>
+
+<script src="assets/script.js"></script>
+<script>
+const scrapEntries = [
+  {emoji:'🌸', caption:'The day everything felt lighter'},
+  {emoji:'☕', caption:'Cozy little mornings'},
+  {emoji:'🎈', caption:'A silly, happy afternoon'},
+  {emoji:'🌙', caption:'Late-night giggles'},
+  {emoji:'🧸', caption:'A memory worth keeping'}
+];
+let scrapIndex = 0;
+function renderScrap(){
+  document.getElementById('scrap-img').textContent = scrapEntries[scrapIndex].emoji;
+  document.getElementById('scrap-caption').textContent = scrapEntries[scrapIndex].caption;
+  const card = document.getElementById('scrap-card');
+  card.style.transform = 'rotateY(90deg)';
+  setTimeout(()=>{ card.style.transform = `rotate(${rand(-3,3)}deg) rotateY(0deg)`; }, 220);
+}
+function scrapNext(){ playClick(); scrapIndex = (scrapIndex+1)%scrapEntries.length; renderScrap(); }
+function scrapPrev(){ playClick(); scrapIndex = (scrapIndex-1+scrapEntries.length)%scrapEntries.length; renderScrap(); }
+renderScrap();
+</script>
+</body>
+</html>

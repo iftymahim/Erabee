@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Make Me Laugh · For Erabeee</title>
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<div id="bg-sky"></div>
+
+<header class="top-nav">
+  <a class="nav-home" href="index.html" aria-label="Home">🏠</a>
+  <div class="nav-stage">Stage <span>4</span> of 9 · Make Me Laugh</div>
+  <button class="nav-music" id="music-toggle" title="Toggle music">🔇</button>
+</header>
+<div class="progress-track"><div class="progress-fill" style="width:44%;"></div></div>
+
+<main>
+  <div class="card">
+    <div class="eyebrow">😂 Make Me Laugh</div>
+    <h2>A giggle for Erabeee</h2>
+    <div class="message-box" id="joke-text" style="font-family:'Quicksand'; font-size:18px; font-weight:600;">Tap for a silly joke 🐣</div>
+    <button class="btn" onclick="playClick(); newJoke();">Tell me something silly</button>
+  </div>
+
+  <div class="stage-footer-nav">
+    <a class="btn secondary" href="compliments.html">← Back</a>
+    <a class="btn ghost" href="index.html">Map</a>
+    <a class="btn" href="amazing.html">Next: You're Amazing →</a>
+  </div>
+</main>
+
+<footer>
+  <p class="script" style="font-size:22px;">Made with endless warmth, just for Erabeee 💖</p>
+  <button id="secret-heart" title="...">💗</button>
+</footer>
+
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <p id="modal-text"></p>
+  </div>
+</div>
+
+<script src="assets/script.js"></script>
+<script>
+const jokes = [
+  "Why did the teddy bear say no to dessert? Because it was already stuffed. 🧸",
+  "What do you call a cat that loves to bowl? An alley cat. 🐱",
+  "Why did the cloud blush? It saw the sun changing behind the mountain. ☁️",
+  "What do you call a bear with no teeth? A gummy bear. 🐻",
+  "Why don't scientists trust stars? Because they're always a little shady. ⭐"
+];
+function newJoke(){ document.getElementById('joke-text').textContent = pick(jokes); }
+</script>
+</body>
+</html>

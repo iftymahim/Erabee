@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Daily Smile · For Erabeee</title>
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<div id="bg-sky"></div>
+
+<header class="top-nav">
+  <a class="nav-home" href="index.html" aria-label="Home">🏠</a>
+  <div class="nav-stage">Stage <span>1</span> of 9 · Daily Smile</div>
+  <button class="nav-music" id="music-toggle" title="Toggle music">🔇</button>
+</header>
+<div class="progress-track"><div class="progress-fill" style="width:11%;"></div></div>
+
+<main>
+  <div class="card">
+    <div class="eyebrow">💕 Daily Smile</div>
+    <h2>A little something for today</h2>
+    <div class="message-box script" id="smile-text">Tap the button, Erabeee 🌷</div>
+    <button class="btn" onclick="playClick(); newSmile();">Give me a smile</button>
+  </div>
+
+  <div class="stage-footer-nav">
+    <a class="btn ghost" href="index.html">Map</a>
+    <a class="btn" href="hug.html">Next: Virtual Hug →</a>
+  </div>
+</main>
+
+<footer>
+  <p class="script" style="font-size:22px;">Made with endless warmth, just for Erabeee 💖</p>
+  <button id="secret-heart" title="...">💗</button>
+</footer>
+
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <p id="modal-text"></p>
+  </div>
+</div>
+
+<script src="assets/script.js"></script>
+<script>
+const smiles = [
+  "Smile, Erabeee. The world looks prettier when you do. 🌷",
+  "Hey Erabeee, don't forget how amazing you are. ✨",
+  "Someone out there is lucky that you exist. 💖",
+  "Your smile today is going to make someone's whole week, Erabeee.",
+  "One deep breath, Erabeee — you're doing better than you think."
+];
+function newSmile(){ document.getElementById('smile-text').textContent = pick(smiles); }
+</script>
+</body>
+</html>

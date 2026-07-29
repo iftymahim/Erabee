@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Virtual Hug · For Erabeee</title>
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<div id="bg-sky"></div>
+
+<header class="top-nav">
+  <a class="nav-home" href="index.html" aria-label="Home">🏠</a>
+  <div class="nav-stage">Stage <span>2</span> of 9 · Virtual Hug</div>
+  <button class="nav-music" id="music-toggle" title="Toggle music">🔇</button>
+</header>
+<div class="progress-track"><div class="progress-fill" style="width:22%;"></div></div>
+
+<main>
+  <div class="card">
+    <div class="eyebrow">🤗 Virtual Hug</div>
+    <h2>Need a Hug, Erabeee?</h2>
+    <div class="message-box script" id="hug-text" style="min-height:40px;"></div>
+    <button class="btn" onclick="sendHug()">Send me a hug</button>
+  </div>
+
+  <div class="stage-footer-nav">
+    <a class="btn secondary" href="smile.html">← Back</a>
+    <a class="btn ghost" href="index.html">Map</a>
+    <a class="btn" href="compliments.html">Next: Compliments →</a>
+  </div>
+</main>
+
+<footer>
+  <p class="script" style="font-size:22px;">Made with endless warmth, just for Erabeee 💖</p>
+  <button id="secret-heart" title="...">💗</button>
+</footer>
+
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <p id="modal-text"></p>
+  </div>
+</div>
+
+<script src="assets/script.js"></script>
+<script>
+function sendHug(){
+  playClick();
+  document.getElementById('hug-text').textContent = "Sending the biggest virtual hug to Erabeee... 🤗💕";
+  burstHearts(40);
+}
+</script>
+</body>
+</html>
