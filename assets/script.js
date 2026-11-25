@@ -186,121 +186,82 @@ function initEasterEgg(){
    run through a soft low-pass filter and a light echo so nothing
    sounds sharp or jarring. Preference is remembered between pages.
    ===================================================================== */
-let musicPlaying = false;
-let musicTimeout = null;
-let musicChain = null; // { master, filter, delay, pad:[{o,g}] }
+/* =====================================================================
+   MUSIC: plays assets/thousandyears.mp3 on every page.
+   Remembers on/off and the playback position between pages.
+   ===================================================================== */
+const bgAudio = new Audio('assets/thousandyears.mp3');
+bgAudio.loop = true;
+bgAudio.preload = 'auto';
+bgAudio.volume = 0.6; // 0 to 1
 
-function buildMusicChain(){
-  const ctx = ensureAudio();
-  const master = ctx.createGain();
-  master.gain.value = 1;
-  const filter = ctx.createBiquadFilter();
-  filter.type = 'lowpass';
-  filter.frequency.value = 1500; // rounds off harsh edges -> softer tone
-  filter.Q.value = 0.3;
-  const delay = ctx.createDelay();
-  delay.delayTime.value = 0.4;
-  const feedback = ctx.createGain();
-  feedback.gain.value = 0.22;
-  const delayWet = ctx.createGain();
-  delayWet.gain.value = 0.25;
-
-  master.connect(filter);
-  filter.connect(ctx.destination);
-  filter.connect(delay);
-  delay.connect(feedback);
-  feedback.connect(delay);
-  delay.connect(delayWet);
-  delayWet.connect(ctx.destination);
-
-  return { ctx, master, filter, delay, pad: [] };
+function updateMusicButtons(){
+  const playing = !bgAudio.paused;
+  document.querySelectorAll('.nav-music').forEach(btn=>{
+    btn.textContent = playing ? '🔊' : '🔇';
+    btn.setAttribute('aria-pressed', playing);
+  });
+  const corner = document.getElementById('music-corner-btn');
+  if(corner) corner.textContent = playing ? 'Pause music' : 'Play soft music';
 }
 
 function startMusic(){
-  const ctx = ensureAudio();
-  if(ctx.state === 'suspended') ctx.resume();
-  musicPlaying = true;
-  localStorage.setItem('erabeee_music', 'on');
-  updateMusicButtons();
-
-  musicChain = buildMusicChain();
-  const { master } = musicChain;
-
-  // warm sustained major triad underneath everything (C major: C4 E4 G4)
-  const padFreqs = [261.63, 329.63, 392.00];
-  musicChain.pad = padFreqs.map((f, idx)=>{
-    const o = ctx.createOscillator();
-    o.type = 'triangle';
-    o.frequency.value = f;
-    o.detune.value = idx===1 ? 4 : -4; // gentle chorus-like warmth
-    const g = ctx.createGain();
-    g.gain.value = 0.0001;
-    o.connect(g); g.connect(master);
-    o.start();
-    g.gain.linearRampToValueAtTime(0.028, ctx.currentTime + 2.5);
-    return { o, g };
-  });
-
-  // happy, soft pentatonic melody (C D E G A) played slowly with gentle attack/release
-  const melody = [523.25, 587.33, 659.25, 783.99, 880.00, 783.99, 659.25, 587.33];
-  let i = 0;
-  function playNote(){
-    if(!musicPlaying || !musicChain) return;
-    const now = ctx.currentTime;
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.type = 'sine';
-    o.frequency.value = melody[i % melody.length];
-    g.gain.value = 0.0001;
-    o.connect(g); g.connect(master);
-    o.start();
-    g.gain.linearRampToValueAtTime(0.06, now + 0.5);   // slow, soft attack (no chime "attack" click)
-    g.gain.linearRampToValueAtTime(0.0001, now + 2.1);  // long gentle release
-    o.stop(now + 2.2);
-    i++;
-    musicTimeout = setTimeout(playNote, 1350); // relaxed, unhurried tempo
-  }
-  playNote();
+  return bgAudio.play()
+    .then(()=> localStorage.setItem('erabeee_music', 'on'))
+    .catch(err => console.error('Playback failed:', err));
 }
 
 function stopMusic(){
-  musicPlaying = false;
+  bgAudio.pause();
   localStorage.setItem('erabeee_music', 'off');
-  clearTimeout(musicTimeout);
-  updateMusicButtons();
-  if(musicChain){
-    const ctx = musicChain.ctx;
-    musicChain.pad.forEach(({o,g})=>{
-      try{
-        g.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 1);
-        setTimeout(()=>{ try{ o.stop(); }catch(e){} }, 1100);
-      }catch(e){}
-    });
-    musicChain = null;
-  }
 }
 
 function toggleMusic(){
-  musicPlaying ? stopMusic() : startMusic();
+  bgAudio.paused ? startMusic() : stopMusic();
 }
 
-function updateMusicButtons(){
-  document.querySelectorAll('.nav-music').forEach(btn=> btn.textContent = musicPlaying ? '🔊' : '🔇');
-  const corner = document.getElementById('music-corner-btn');
-  if(corner) corner.textContent = musicPlaying ? 'Pause music' : 'Play soft music';
+function saveMusicPosition(){
+  localStorage.setItem('erabeee_music_time', bgAudio.currentTime);
 }
 
 function initMusicControls(){
+  // restore position from the previous page
+  // the music page is the one with the corner button
+  const isMusicPage = !!document.getElementById('music-corner-btn');
+
+  if(isMusicPage){
+    // always start from the beginning, and don't auto-resume
+    localStorage.setItem('erabeee_music_time', 0);
+    localStorage.setItem('erabeee_music', 'off');
+    bgAudio.currentTime = 0;
+  } else {
+    // other pages: continue from where the song was
+    const savedTime = parseFloat(localStorage.getItem('erabeee_music_time'));
+    if(!isNaN(savedTime)){
+      bgAudio.addEventListener('loadedmetadata', ()=>{ bgAudio.currentTime = savedTime; }, { once:true });
+    }
+  }
+
+  bgAudio.addEventListener('play', updateMusicButtons);
+  bgAudio.addEventListener('pause', updateMusicButtons);
+  bgAudio.addEventListener('timeupdate', ()=>{ if(!bgAudio.paused) saveMusicPosition(); });
+  window.addEventListener('pagehide', saveMusicPosition);
+
   document.querySelectorAll('.nav-music').forEach(btn=> btn.addEventListener('click', toggleMusic));
   const corner = document.getElementById('music-corner-btn');
   if(corner) corner.addEventListener('click', toggleMusic);
   updateMusicButtons();
-  // try to resume automatically if it was playing before navigating to this page
+
+  // if it was playing on the last page, try to continue
   if(localStorage.getItem('erabeee_music') === 'on'){
-    // browsers require a user gesture for audio; attempt on first interaction with the page
-    const resume = ()=>{ startMusic(); document.removeEventListener('click', resume); document.removeEventListener('touchstart', resume); };
-    document.addEventListener('click', resume, { once:true });
-    document.addEventListener('touchstart', resume, { once:true });
+    startMusic().then(()=>{
+      if(bgAudio.paused){
+        // browser blocked autoplay: resume on the first tap or click
+        const resume = ()=>{ if(bgAudio.paused) startMusic(); };
+        document.addEventListener('click', resume, { once:true });
+        document.addEventListener('touchstart', resume, { once:true });
+      }
+    });
   }
 }
 
@@ -316,3 +277,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
   initEasterEgg();
   initMusicControls();
 });
+
+
+
+
+
+
+
